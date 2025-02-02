@@ -13,15 +13,12 @@ GoroDict adalah sebuah proyek yang bertujuan untuk melestarikan dan mempromosika
 
 ## Fitur
 
+* **Pencarian Kata**: pengguna dapat mencari kata-kata dalam bahasa Gorontalo dan Indonesia
 * **Pengelolaan Kamus**:
     + Word: pengelolaan kata-kata dalam bahasa Gorontalo dan Indonesia
     + Category: pengelolaan kategori kata-kata
 * **Word Submission**: pengguna dapat mengirimkan kata-kata baru untuk ditambahkan ke dalam kamus
 * **Artikel**: pengguna dapat membaca artikel-artikel tentang bahasa dan budaya Gorontalo
-
-## Status Proyek
-
-GoroDict masih dalam tahap pengembangan dan belum selesai. Saya sedang menambahkan fitur-fitur baru dan memperbaiki aplikasi.
 
 ## Instalasi
 
