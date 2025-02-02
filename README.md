@@ -6,6 +6,11 @@ GoroDict adalah sebuah aplikasi web kamus bahasa daerah Gorontalo - Indonesia ya
 
 GoroDict adalah sebuah proyek yang bertujuan untuk melestarikan dan mempromosikan bahasa daerah Gorontalo. Aplikasi ini menyediakan kamus online yang memungkinkan pengguna untuk mencari kata-kata dalam bahasa Gorontalo dan Indonesia.
 
+## Preview Proyek
+
+![Preview Proyek GoroDict Home Page](/preview-project/home-page.png)
+![Preview Proyek GoroDict Word Page](/preview-project/dashboard-page.png)
+
 ## Fitur
 
 * **Pengelolaan Kamus**:

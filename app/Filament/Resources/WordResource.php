@@ -68,7 +68,6 @@ class WordResource extends Resource
                             ->acceptedFileTypes(['audio/mpeg', 'audio/wav'])
                             ->maxSize(5120)
                             ->downloadable()
-                            ->previewable(false)
                             ->openable()
                             ->live(),
                     ])
@@ -82,7 +81,7 @@ class WordResource extends Resource
                 Tables\Columns\TextColumn::make('word_gorontalo')->searchable(),
                 Tables\Columns\TextColumn::make('word_indonesia')->searchable(),
                 Tables\Columns\TextColumn::make('category.name')->sortable()->default('-'),
-                Tables\Columns\ViewColumn::make('audio')->view('filament.tables.columns.audio-player'),
+                Tables\Columns\ViewColumn::make('audio')->view('filament.tables.columns.audio-player')->disableClick(),
             ])
             ->defaultSort('word_gorontalo', 'asc')
             ->filters([

@@ -1,8 +1,11 @@
 @if($getRecord()->audio_path)
     <div x-data="{
         playing: false,
-        audio: new Audio('{{ Storage::url($getRecord()->audio_path) }}')
-    }" class="flex items-center space-x-2">
+        audio: new Audio('{{ Storage::url($getRecord()->audio_path) }}'),
+        stopPropagation(event) {
+            event.stopPropagation();
+        }
+    }" class="flex items-center space-x-2" @click="stopPropagation($event)">
         <!-- Play Button -->
         <button
             x-show="!playing"
