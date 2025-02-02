@@ -16,7 +16,7 @@ GoroDict adalah sebuah proyek yang bertujuan untuk melestarikan dan mempromosika
 
 ## Status Proyek
 
-GoroDict masih dalam tahap pengembangan dan belum selesai. Kami sedang bekerja keras untuk menambahkan fitur-fitur baru dan memperbaiki aplikasi.
+GoroDict masih dalam tahap pengembangan dan belum selesai. Saya sedang menambahkan fitur-fitur baru dan memperbaiki aplikasi.
 
 ## Instalasi
 
@@ -29,7 +29,7 @@ Untuk menginstal GoroDict, silakan ikuti langkah-langkah berikut:
 
 ## Kontribusi
 
-Kami mengundang Anda untuk berkontribusi pada proyek GoroDict. Silakan fork repository ini dan kirimkan pull request untuk menambahkan fitur baru atau memperbaiki bug.
+Saya mengundang Anda untuk berkontribusi pada proyek GoroDict. Silakan fork repository ini dan kirimkan pull request untuk menambahkan fitur baru atau memperbaiki bug.
 
 ## Lisensi
 
