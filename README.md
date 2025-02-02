@@ -32,6 +32,9 @@ Untuk menginstal GoroDict, silakan ikuti langkah-langkah berikut:
 * Jalankan perintah `php artisan migrate` untuk membuat tabel database
 * Jalankan perintah `php artisan serve` untuk menjalankan aplikasi
 
+* Jalankan perintah `npm install` untuk menginstal dependencies
+* Jalankan perintah `npm run dev` untuk mengkompilasi aset
+
 ## Kontribusi
 
 Saya mengundang Anda untuk berkontribusi pada proyek GoroDict. Silakan fork repository ini dan kirimkan pull request untuk menambahkan fitur baru atau memperbaiki bug.
