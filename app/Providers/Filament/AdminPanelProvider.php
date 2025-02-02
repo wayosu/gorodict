@@ -31,6 +31,8 @@ class AdminPanelProvider extends PanelProvider
             ->path('dashboard')
             ->login()
             ->registration()
+            ->spa()
+            ->profile(isSimple: false)
             ->brandName(fn () => auth()->user()?->isAdmin() ? 'GoroDict Admin' : 'GoroDict')
             ->colors([
                 'primary' => Color::Amber,
@@ -64,7 +66,6 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-                AdminMiddleware::class,
             ])
             ->authGuard('web');
     }

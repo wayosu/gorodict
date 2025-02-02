@@ -13,16 +13,28 @@ use Filament\Tables\Table;
 use Filament\Forms\Components\Section;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\HtmlString;
 use App\Models\Word;
+
+
 class WordSubmissionResource extends Resource
 {
     protected static ?string $model = WordSubmission::class;
 
-    protected static ?string $navigationGroup = 'Dictionary';
+    public static function getNavigationIcon(): ?string
+    {
+        return auth()->user()->isAdmin() ? null : 'heroicon-o-plus';
+    }
 
-    protected static ?string $navigationIcon = null;
+    public static function getNavigationSort(): ?int
+    {
+        return auth()->user()->isAdmin() ? 3 : 0;
+    }
 
-    protected static ?int $navigationSort = 3;
+    public static function getNavigationGroup(): ?string
+    {
+        return auth()->user()->isAdmin() ? 'Dictionary' : null;
+    }
 
     public static function getNavigationLabel(): string
     {
@@ -73,17 +85,21 @@ class WordSubmissionResource extends Resource
                 Tables\Columns\TextColumn::make('word_indonesia')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('category.name'),
+                Tables\Columns\ViewColumn::make('audio')->view('filament.tables.columns.audio-player'),
                 Tables\Columns\TextColumn::make('user.name')
                     ->label('Submitted by')
                     ->visible($isAdmin),
-                Tables\Columns\SelectColumn::make('status')
+                Tables\Columns\TextColumn::make('status')
                     ->badge()
-                    ->options([
-                        'pending' => 'Pending',
-                        'approved' => 'Approved',
-                        'rejected' => 'Rejected',
-                    ])
-                    ->disabled(fn (Model $record) => $record->status !== 'pending'),
+                    ->color(fn (string $state): string => match ($state) {
+                        'approved' => 'success',
+                        'rejected' => 'danger',
+                        default => 'warning',
+                    }),
+                Tables\Columns\TextColumn::make('rejection_reason')
+                    ->visible(fn (?WordSubmission $record): bool =>
+                        $record?->status === 'rejected'
+                    ),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime(),
             ])
@@ -93,12 +109,27 @@ class WordSubmissionResource extends Resource
                         'pending' => 'Pending',
                         'approved' => 'Approved',
                         'rejected' => 'Rejected',
-                    ]),
+                    ])
+                    ->visible($isAdmin),
             ])
             ->actions([
+                Tables\Actions\Action::make('view_reason')
+                    ->label('View Reason')
+                    ->icon('heroicon-o-information-circle')
+                    ->modalWidth('md')
+                    ->modalHeading('Rejection Reason')
+                    ->modalContent(fn (WordSubmission $record): HtmlString =>
+                        new HtmlString(nl2br(e($record->rejection_reason)))
+                    )
+                    ->modalSubmitAction(false)
+                    ->modalCancelActionLabel('Close')
+                    ->visible(fn (?WordSubmission $record): bool =>
+                        $record?->status === 'rejected'
+                    )
+                    ->color('danger'),
+
                 Tables\Actions\Action::make('approve')
                     ->action(function (WordSubmission $record) {
-                        // Copy submission to words table
                         Word::create([
                             'word_gorontalo' => $record->word_gorontalo,
                             'word_indonesia' => $record->word_indonesia,
@@ -109,14 +140,18 @@ class WordSubmissionResource extends Resource
 
                         $record->update(['status' => 'approved']);
                     })
-                    ->visible(fn (WordSubmission $record) => auth()->user()->isAdmin() && $record->status === 'pending')
+                    ->requiresConfirmation()
+                    ->visible(fn (WordSubmission $record) =>
+                        $isAdmin && $record->status === 'pending'
+                    )
                     ->color('success')
                     ->icon('heroicon-o-check'),
 
                 Tables\Actions\Action::make('reject')
                     ->form([
                         Forms\Components\Textarea::make('rejection_reason')
-                            ->required(),
+                            ->required()
+                            ->maxLength(1000),
                     ])
                     ->action(function (WordSubmission $record, array $data) {
                         $record->update([
@@ -124,7 +159,10 @@ class WordSubmissionResource extends Resource
                             'rejection_reason' => $data['rejection_reason'],
                         ]);
                     })
-                    ->visible(fn (WordSubmission $record) => auth()->user()->isAdmin() && $record->status === 'pending')
+                    ->visible(fn (WordSubmission $record) =>
+                        $isAdmin && $record->status === 'pending'
+                    )
+                    ->requiresConfirmation()
                     ->color('danger')
                     ->icon('heroicon-o-x-mark'),
             ])
@@ -141,19 +179,6 @@ class WordSubmissionResource extends Resource
         }
 
         return $query;
-    }
-
-    protected function mutateFormDataBeforeCreate(array $data): array
-    {
-        $data['user_id'] = auth()->id();
-        $data['status'] = 'pending';
-
-        return $data;
-    }
-
-    public static function getNavigationGroup(): ?string
-    {
-        return auth()->user()->isAdmin() ? 'Dictionary' : null;
     }
 
     // Kontrol akses berdasarkan role

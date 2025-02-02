@@ -9,6 +9,8 @@ class WordSubmission extends Model
 {
     use HasUuids;
 
+    protected $table = 'word_submissions';
+
     protected $fillable = [
         'user_id',
         'word_gorontalo',
@@ -20,13 +22,23 @@ class WordSubmission extends Model
         'rejection_reason'
     ];
 
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($submission) {
+            $submission->user_id = auth()->id();
+            $submission->status = 'pending';
+        });
+    }
+
     public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     public function category()
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Category::class, 'category_id', 'id');
     }
 }

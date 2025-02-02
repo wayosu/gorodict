@@ -54,6 +54,6 @@ class User extends Authenticatable
 
     public function wordSubmissions()
     {
-        return $this->hasMany(WordSubmission::class);
+        return $this->hasMany(WordSubmission::class, 'user_id', 'id');
     }
 }
